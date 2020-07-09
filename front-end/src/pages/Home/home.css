@@ -6,28 +6,8 @@
 
 
 }
-
-.question-section {
-    padding: 15px 10px 15px 10px;
-}
-
-.answer {
-    background-color: #CEFFD6;
-}
-
-.socialIcon {
-    margin: 10px;
-}
-
-.facebook {
-    color: #4267B2;
-}
-
-.twitter {
-    color: #1DA1F2
-}
-
-.instagram {
-    color: #E1306C
+.nav-link{
+    text-decoration: none;
+    color: black;
 }
 

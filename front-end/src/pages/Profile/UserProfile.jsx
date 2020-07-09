@@ -6,13 +6,11 @@ import ListItem from '@material-ui/core/ListItem';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 
+import { MentionsInput, Mention } from 'react-mentions'
+import TextField from '@material-ui/core/TextField';
 
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
-import GitHubIcon from '@material-ui/icons/GitHub';
-import FacebookIcon from '@material-ui/icons/Facebook';
-import TwitterIcon from '@material-ui/icons/Twitter';
-import InstagramIcon from '@material-ui/icons/Instagram';
-import FavoriteIcon from '@material-ui/icons/Favorite';
+
 import BookIcon from '@material-ui/icons/Book';
 import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
 import GroupAddIcon from '@material-ui/icons/GroupAdd';
@@ -21,12 +19,9 @@ import IconButton from '@material-ui/core/IconButton';
 
 
 import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
-import CardMedia from '@material-ui/core/CardMedia';
+
 import CardContent from '@material-ui/core/CardContent';
-import CardActions from '@material-ui/core/CardActions';
-import Collapse from '@material-ui/core/Collapse';
-import Avatar from '@material-ui/core/Avatar';
+
 
 
 import SwipeableViews from 'react-swipeable-views';
@@ -38,9 +33,12 @@ import Box from '@material-ui/core/Box';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import PropTypes from 'prop-types';
+import {getAllProfile, getExactProfile} from '../../services/profile'
+import { getExactUserPost } from '../../services/post'
 
 import './userProfile.css';
 import UserProfileDetails from '../../components/ProfileDetails/UserProfileDetails';
+import PostComponent from '../../components/PostComponent/PostComponent';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -104,6 +102,59 @@ function TabPanel(props) {
 
 export default function UserProfile() {
 
+        let [name,setName] = React.useState('')
+        let [username,setUsername] = React.useState('')
+        let [myPosts, setMyPosts] = React.useState([])
+        let localStorageUser = localStorage.getItem('user')
+        let u_id = JSON.parse(localStorageUser).id
+
+
+        React.useEffect(()=>{
+          getExactUserPost({user_id: u_id})
+          .then((res)=> setMyPosts(res.data))
+
+
+        },[]) 
+
+        React.useEffect(()=>{
+          getAllProfile().then(res=>{
+            res.data.map(data=>{
+              if(data._id == u_id)
+              {
+                setName(data.name)
+                setUsername(data.username)
+              }
+              
+            })
+            // console.log(res);
+            
+            
+          })
+
+        },'') 
+
+      
+
+
+        // getAllProfile().then(res=>{
+        //   res.data.map(data=>{
+        //     if(data._id == u_id)
+        //     {
+        //       setName(data.name)
+        //       setUsername(data.username)
+        //     }
+            
+        //   })
+        //   // console.log(res);
+          
+          
+        // })
+
+        
+      
+
+
+
     
   
         const [value, setValue] = React.useState(0);
@@ -122,11 +173,12 @@ export default function UserProfile() {
 
         return (
             <div>
-                <Navbar
-                text="AV"
+                <Navbar/>
+                <UserProfileDetails
+                name={name}
+                username={username}
                 
                 />
-                <UserProfileDetails/>
                 <div>
                 <Tabs
                     value={value}
@@ -138,7 +190,7 @@ export default function UserProfile() {
                     
                     >
                     <Tab label="Posts" wrapped icon={<BookIcon />} {...a11yProps(0)}/>
-                    <Tab label="Skills" wrapped icon={<FavoriteIcon />} {...a11yProps(1)} />
+                    
                     <Tab label="Followers" wrapped icon={<PeopleAltIcon />} {...a11yProps(2)} />
                     <Tab label="Following" wrapped icon={<GroupAddIcon />} {...a11yProps(3)} />
                 </Tabs>
@@ -149,130 +201,31 @@ export default function UserProfile() {
                 >
                     <TabPanel value={value} index={0} dir={theme.direction}>
                     <p>Your Posts</p>
+
+
+
+                    {
+                      myPosts.length ===0 ? '' : 
+
+                      myPosts.map((data,key)=>{
+                        return(
+                        <PostComponent
+                        key={key}
+                        data={data}
+                        
+                        />
+                        )
+                        
+
+                      })
+                    }
+
+
+                 
+
                     </TabPanel>
-                    <TabPanel value={value} index={1} dir={theme.direction}>
-                    <p>Add / Edit Skills</p>
-                    </TabPanel>
-                    <TabPanel value={value} index={2} dir={theme.direction}>
-                    <Grid container spacing={3}>
-                        <Grid item xs={12} md={8} style={{ backgroundColor: '#DEDEDE'}}>
-                          <Grid container spacing={3}>
-                            <Grid item xs={12} md={4}>
-                                <Card className={classes.rootcard}>
-                                  <CardContent>
-                                    <Grid container spacing={3}>
-                                      <Grid item xs={4} md={4}>
-                                        <AccountCircleIcon style={{ fontSize: '90px' }}/>
-                                      </Grid>
-                                      <Grid item xs={8} md={8}>
-                                        <h4>User Name</h4>
-                                        <p>@user_handle</p>
-                                        <Button variant="outlined">Following</Button>
-                                      </Grid>
-                                    </Grid>
-                                  </CardContent>
-                                
-                                </Card>
-                            </Grid>
-                            <Grid item xs={12} md={4}>
-                              <Card className={classes.rootcard}>
-                                <CardContent>
-                                  <Grid container spacing={3}>
-                                    <Grid item xs={4} md={4}>
-                                      <AccountCircleIcon style={{ fontSize: '90px' }}/>
-                                    </Grid>
-                                    <Grid item xs={8} md={8}>
-                                      <h4>User Name</h4>
-                                      <p>@user_handlepp</p>
-                                      <Button variant="outlined">Following</Button>
-                                    </Grid>
-                                  </Grid>
-                                </CardContent>
-                              
-                              </Card>
-                            </Grid>
-                            <Grid item xs={12} md={4}>
-                              <Card className={classes.rootcard}>
-                                <CardContent>
-                                  <Grid container spacing={3}>
-                                    <Grid item xs={4} md={4}>
-                                      <AccountCircleIcon style={{ fontSize: '90px' }}/>
-                                    </Grid>
-                                    <Grid item xs={8} md={8}>
-                                      <h4>User Name</h4>
-                                      <p>@user_handle</p>
-                                      <Button variant="outlined">Following</Button>
-                                    </Grid>
-                                  </Grid>
-                                </CardContent>
-                              
-                              </Card>
-                            </Grid>
-                            <Grid item xs={12} md={4}>
-                              <Card className={classes.rootcard}>
-                                <CardContent>
-                                  <Grid container spacing={3}>
-                                    <Grid item xs={4} md={4}>
-                                      <AccountCircleIcon style={{ fontSize: '90px' }}/>
-                                    </Grid>
-                                    <Grid item xs={8} md={8}>
-                                      <h4>User Name</h4>
-                                      <p>@user_handle</p>
-                                      <Button variant="outlined">Following</Button>
-                                    </Grid>
-                                  </Grid>
-                                </CardContent>
-                              
-                              </Card>
-                            </Grid>
-                            </Grid>
-                        </Grid>
-                        <Grid item xs={12} md={4} style={{ backgroundColor: '#DEDEDE'}}>
-                          <h3>Suggestions</h3>
-                          <hr/>
-                          <Grid container spacing={3}>
-                            <Grid item xs={12} md={12}>
-                              <Card className={classes.rootcard}>
-                                    <CardContent>
-                                      <Grid container spacing={3}>
-                                        <Grid item xs={4} md={4}>
-                                          <AccountCircleIcon style={{ fontSize: '90px' }}/>
-                                        </Grid>
-                                        <Grid item xs={8} md={8}>
-                                          <h4>User Name</h4>
-                                          <p>@user_handle</p>
-                                          <Button variant="outlined">Follow</Button>
-                                        </Grid>
-                                      </Grid>
-                                    </CardContent>
-                                  
-                              </Card>
-                            </Grid>
-                            <Grid item xs={12} md={12}>
-                              <Card className={classes.rootcard}>
-                                    <CardContent>
-                                      <Grid container spacing={3}>
-                                        <Grid item xs={4} md={4}>
-                                          <AccountCircleIcon style={{ fontSize: '90px' }}/>
-                                        </Grid>
-                                        <Grid item xs={8} md={8}>
-                                          <h4>User Name</h4>
-                                          <p>@user_handle</p>
-                                          <Button variant="outlined">Follow</Button>
-                                        </Grid>
-                                      </Grid>
-                                    </CardContent>
-                                  
-                              </Card>
-                            </Grid>
-                          </Grid>
-                        </Grid>
-                    </Grid>
                     
-                    </TabPanel>
-                    <TabPanel value={value} index={3} dir={theme.direction}>
-                    <p>Following</p>
-                    </TabPanel>
+                   
                 </SwipeableViews>
  
                 
