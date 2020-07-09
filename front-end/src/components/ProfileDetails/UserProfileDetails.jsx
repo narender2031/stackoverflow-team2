@@ -79,8 +79,8 @@ export class UserProfileDetails extends Component {
                 <div className="profileavatar">
                     <AccountCircleIcon style={{ fontSize: '150px', color: '#eeeeee'}}/>
                     <div className="userhandle">
-                        <h4>User Name</h4>
-                        <p>@user_handle</p>
+        <h4>{this.props.name}</h4>
+                        <p>{this.props.username}</p>
                     </div>
                 </div>
               </Grid>

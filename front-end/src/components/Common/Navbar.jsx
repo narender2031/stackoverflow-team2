@@ -129,19 +129,28 @@ export default function Navbar(props) {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap>
-          TeamStack
+            TeamStack
           </Typography>
           <div className="navbar-left">
 
 
-            <Button color="inherit">
-            Home
-            </Button>
           </div>
           <div className="navbar-right">
-            <IconButton color="inherit" className="user-btn">
-              <PersonIcon />
-            </IconButton>
+            
+          <Button color="inherit">
+              <NavLink className="nav-link" to="/" >
+                Home
+              </NavLink></Button>
+
+
+
+            <Button color="inherit"><NavLink className="nav-link" to="/upload-post">
+                Post
+              </NavLink></Button>
+      
+              <Button color="inherit"><NavLink className="nav-link" to="/profile">
+                Profile
+              </NavLink></Button>
             <IconButton color="inherit" className="settings-btn">
             <Button
             onClick={()=> handleLogOut()}

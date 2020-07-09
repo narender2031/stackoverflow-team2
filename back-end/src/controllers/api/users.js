@@ -3,21 +3,56 @@ const nodemailer = require('nodemailer');
 const axios = require('axios');
 const createController = require('../createController');
 const User = require('../../models/User');
-
+const Post = require('../../models/Post')
 const authValidator = require('../../validators/auth');
 const jwt = require('../../utils/jwt');
 const { USER_NOT_FOUND, INCORRECT_PASSWORD } = require('../../utils/constants');
 
 module.exports = {
-  getAllUsersExceptMe: createController(
+  getExactProfile:createController(
+    async(req,res)=>{
+      
+      const user = await User.findOne({ _id: req.params.id })
+      res.send(user)
+    }
+  ),
+  getAllProfile: createController(
     async(req,res)=>{
       let user_id = req.body.user_id
-      const users = await User.find({ _id: { $ne: user_id } });
+      const users = await User.find();
       res.send(users)
+    }
+  ),
+  setPosts : createController(
+    async(req,res)=>{
+      console.log(req.body);
+      const newPost = new Post(req.body)
+      newPost.save()
+      res.status(200).send("pppp")
+    }
+  ),
+  getExactPost:createController(
+    async(req,res)=>{
+
+    }
+  ),
+  getPosts : createController(
+    async(req,res)=>{
+
+     
+     
+      
+      let user_id = req.body.user_id
+      const posts = await Post.find({ _id: { $ne: user_id } });
+      res.send(posts)
+      
+      
+    
       
       
     }
   ),
+
   login: createController(
     async (req, res) => {
       const { username, password } = res.locals.inputBody;
