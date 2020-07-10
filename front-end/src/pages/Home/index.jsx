@@ -118,7 +118,9 @@ class Home extends Component{
                 {/* Breadcrumbs sections */}
                 <Breadcrumbs aria-label="breadcrumb" className="breadcrumbs" style={{ marginLeft: '10px', marginRight: '10px', marginTop: '80px'}}>
             
-              
+                <Typography gutterBottom variant="h5" component="h6">
+              Feed (You can only see other's posts here)
+              </Typography>
       
   
                 </Breadcrumbs>  
@@ -133,9 +135,7 @@ class Home extends Component{
             
             <Card className={classes.root} style={{ marginTop: '10px' }}>
               <CardContent>
-              <Typography gutterBottom variant="h5" component="h2">
-              Feed (You can only see other's posts here)
-              </Typography>
+              
 
      <hr/>
           {this.state.posts?
@@ -144,7 +144,7 @@ class Home extends Component{
           <PostComponent
           key={key}
           data={data}
-          
+          keyVal = {key}
           />
             )
           })

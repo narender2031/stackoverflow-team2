@@ -7,10 +7,9 @@ import jwt_decode from 'jwt-decode';
 import { GoogleLogin } from 'react-google-login';
 import constants from '../../utils/constants';
 import  setAuthToken  from '../Auth/index';
-import { userRegister, userGoogleSignup } from '../../services/user';
+import { userRegister } from '../../services/user';
 import { registerValidator } from '../../validators/auth';
 
-import Grid from '@material-ui/core/Grid';
 import './register.css';
 
 import axios from 'axios';

@@ -5,7 +5,7 @@ import TextField from '@material-ui/core/TextField';
 export class PostComponent extends Component {
     render() {        
         return (
-            <div key={this.props.key}>   
+            <div key={this.props.keyVal}>   
             <div className="question-section"> 
          
           <div className="question">
