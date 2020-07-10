@@ -212,7 +212,7 @@ export default function UserProfile() {
                         <PostComponent
                         key={key}
                         data={data}
-                        
+                        keyVal= {key}
                         />
                         )
                         

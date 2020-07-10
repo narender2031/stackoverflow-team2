@@ -28,9 +28,9 @@ import TableRow from '@material-ui/core/TableRow';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import { NavLink } from 'react-router-dom';
+import defaultMentionStyle from './defaultMentionStyle'
 
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
+
 import FormHelperText from '@material-ui/core/FormHelperText';
 import { savePost } from '../../services/post'
 import { getAllProfile } from '../../services/profile'
@@ -44,9 +44,10 @@ import Navbar from '../../components/Common/Navbar'
 import axios from 'axios'
 import { MentionsInput, Mention } from 'react-mentions'
 import './UploadPost.css'
-const baseURL_USERS_EXCEPT_ME = `${process.env.REACT_APP_API}/users/usersExceptMe`;
+import defaultStyle from './defaultStyle'
 
-const postURL = `${process.env.REACT_APP_API}/users/add-post`;
+import SingleLine from '../../components/Mention/SingleLine';
+import Advanced from '../../components/Mention/Advanced';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -65,7 +66,7 @@ const useStyles = makeStyles(theme => ({
         marginTop: theme.spacing(2),
       }
   }));
-export class Post extends Component {
+export class UploadPost extends Component {
     constructor(props) {
         super(props);
         this.state = { 
@@ -74,7 +75,9 @@ export class Post extends Component {
           user_heading : '',
           user_text : '',
           users :[
-          ]
+            
+          ],
+          tagged_users:[]
          };
     this.handleChange = this.handleChange.bind(this);
       }
@@ -97,21 +100,27 @@ export class Post extends Component {
         })
 
         getAllProfile().then(res=>{
-          let arr= []
+          let arr=[]
           res.data.map(val=>{
             if(val._id!=u_id){
-              arr.push(val.name)
+              arr.push({
+                id : val._id,
+                display : val.name
+              })
+              
             }
           })
-      
-          
           this.setState({
-            users : arr
+            users: arr
           })
           
         })
+        
+
+
+      
       }
-   
+
     saveMyPost = () => {
         let newComment = this.state.user_text;
         newComment = newComment.split('@@@__').join("<a href=\"/user/")
@@ -145,6 +154,10 @@ export class Post extends Component {
           })
         }
       }
+      onAdd=(ev)=>{
+console.log(ev);
+
+      }
     render() {
         const { classes } = this.props; 
         return (
@@ -177,16 +190,16 @@ export class Post extends Component {
                  <Breadcrumbs aria-label="breadcrumb" className="breadcrumbs" style={{ marginLeft: '10px', marginRight: '10px', marginTop: '80px'}}>
             
               
-      
+                 <Typography gutterBottom variant="h6" component="h6">
+              Post
+              </Typography>
   
             </Breadcrumbs>  
 <Grid item  md={12}>
             
             <Card className={classes.root} style={{ marginTop: '10px' }}>
               <CardContent>
-              <Typography gutterBottom variant="h5" component="h2">
-              Post
-              </Typography>
+             
               <hr/>
           
 
@@ -211,16 +224,26 @@ export class Post extends Component {
                     Text
               </Typography>
              
-              <MentionsInput className='comments-textarea' placeholder="Add text" value={this.state.user_text} onChange={(event) => this.setState({ user_text: event.target.value })}
+              {/* <MentionsInput className='comments-textarea' placeholder="Add text" value={this.state.user_text} onChange={(event) => this.setState({ user_text: event.target.value })}
               >
   <Mention
     trigger="@"
     markup='@@@____id__^^^____display__@@@^^^'
     displayTransform={this.handleDisplayTextForMention}
     data={this.state.users}
-   
+    onAdd={(ev)=>this.onTagAdded(ev)}
+    appendSpaceOnAdd={true}
   />
-</MentionsInput>
+</MentionsInput> */}
+ <MentionsInput
+        onChange={(ev) => this.handleChange('user_text', ev)}
+        value={this.state.user_text}
+        style={defaultStyle}
+        placeholder={"Enter your text here"}
+      >
+        <Mention data={this.state.users} 
+        onAdd={(ev)=>this.onAdd(ev)} style={defaultMentionStyle} />
+      </MentionsInput>
       
       </div>
       <br/>
@@ -250,4 +273,4 @@ export class Post extends Component {
     }
 }
 
-export default withStyles(useStyles, { withTheme: true })(Post);
+export default withStyles(useStyles, { withTheme: true })(UploadPost);
