@@ -46,8 +46,7 @@ import { MentionsInput, Mention } from 'react-mentions'
 import './UploadPost.css'
 import defaultStyle from './defaultStyle'
 
-import SingleLine from '../../components/Mention/SingleLine';
-import Advanced from '../../components/Mention/Advanced';
+
 
 const useStyles = makeStyles(theme => ({
     root: {
